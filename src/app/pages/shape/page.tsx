@@ -45,7 +45,7 @@ const Page = () => {
         const {formulaType1, formulaType2, shapeName1, shapeName2, ...params} =
             data;
 
-        const extractParameters = (shapeName) => {
+        const extractParameters = (shapeName: string) => {
             const shapeParams = {};
             const shapeNameLower = shapeName.toLowerCase(); // Normalize shape name
 
@@ -54,6 +54,7 @@ const Page = () => {
                     const paramKey = key
                         .replace(new RegExp(shapeNameLower, "i"), "")
                         .toLowerCase(); // Extract the parameter key
+                    // @ts-ignore
                     shapeParams[paramKey] = params[key];
                 }
             });
@@ -86,6 +87,7 @@ const Page = () => {
             });
 
             const data = await response.json();
+            // @ts-ignore
             setFinalResult((prevFinalResult) => [
                 ...prevFinalResult,
                 data.data.result,
@@ -323,7 +325,7 @@ const Page = () => {
                         >
                             Back
                         </Button>
-                        <Button type="submit" disabled={isSubmitting}>
+                        <Button type="submit">
                             Calculate
                         </Button>
                     </div>
