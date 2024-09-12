@@ -15,14 +15,22 @@ export const GET = async (req: Request) => {
     try {
         if (id) {
             calculations = await prisma.calculation.findMany({
-                where: {
-                    userId: Number(id),
-                },
+                where: {id: parseInt(id)},
                 include: {
                     user: true,
                     shape: true,
                 },
             });
+
+            if (calculations.length === 0) {
+                return NextResponse.json(
+                    {
+                        message: "Calculation not found",
+                        status: 404,
+                    },
+                    {status: 404}
+                );
+            }
 
         } else {
             calculations = await prisma.calculation.findMany({
