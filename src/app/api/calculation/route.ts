@@ -24,8 +24,12 @@ export const POST = async (req: Request) => {
             );
         }
 
+        console.log("shape", shape);
+
         // Hitung hasil
         const result = evaluate(shape.formula, parameters);
+
+        console.log("result", result);
 
         // Simpan hasil perhitungan
         const calculation = await prisma.calculation.create({
@@ -33,7 +37,7 @@ export const POST = async (req: Request) => {
                 shapeId: shape.id,
                 parameters: parameters,
                 result,
-                userId: id,
+                userId: parseInt(id),
             },
         });
 
@@ -47,7 +51,7 @@ export const POST = async (req: Request) => {
     } catch (error) {
         return NextResponse.json(
             {
-                message: "Internal server error",
+                message: "Internal server error" + error,
             },
             {status: 500}
         );

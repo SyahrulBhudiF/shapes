@@ -13,7 +13,7 @@ const shapesData = [
     {
         shapeName: 'Lingkaran',
         type: 'BangunDatar',
-        formula: 'πr^2',
+        formula: '3.14 * r^2',
         parameters: 'r',
         formulaType: 'Luas'
     },
@@ -55,14 +55,14 @@ const shapesData = [
     {
         shapeName: 'Tabung',
         type: 'BangunRuang',
-        formula: '2 * π * r * (r + t)',
+        formula: '2 * 3.14 * r * (r + t)',
         parameters: 'r, t',
         formulaType: 'Luas'
     },
     {
         shapeName: 'Tabung',
         type: 'BangunRuang',
-        formula: 'π * r^2 * t',
+        formula: '3.14 * r^2 * t',
         parameters: 'r, t',
         formulaType: 'Volume'
     }
