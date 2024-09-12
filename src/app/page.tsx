@@ -10,6 +10,15 @@ import {userInterface} from "@/lib/interface/userInterface";
 
 export default function DashboardPage() {
     const [data, setData] = useState([]);
+    const [count, setCount] = useState({
+        square: 0,
+        circle: 0,
+        triangle: 0,
+        pyramid: 0,
+        cube: 0,
+        cylinder: 0,
+        total: 0,
+    });
     const [sortColumn, setSortColumn] = useState('name');
     const [sortOrder, setSortOrder] = useState('asc');
 
@@ -28,7 +37,43 @@ export default function DashboardPage() {
                     method: 'GET',
                 });
                 const result = await response.json();
-                console.log(result.data);
+
+                const newCount = {...count};
+
+                for (let j = 0; j < result.data[0].calculations.length; j++) {
+                    switch (result.data[0].calculations[j].shapeId) {
+                        case 22:
+                            newCount.square += 1;
+                            break;
+                        case 23:
+                            newCount.circle += 1;
+                            break;
+                        case 24:
+                            newCount.triangle += 1;
+                            break;
+                        case 25:
+                            newCount.pyramid += 1;
+                            break;
+                        case 26:
+                            newCount.cube += 1;
+                            break;
+                        case 27:
+                            newCount.cube += 1;
+                            break;
+                        case 28:
+                            newCount.cylinder += 1;
+                            break;
+                        case 29:
+                            newCount.cylinder += 1;
+                            break;
+                        case 30:
+                            newCount.cylinder += 1;
+                            break;
+                    }
+                }
+
+                setCount(newCount);
+
                 setData(result.data);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -62,6 +107,18 @@ export default function DashboardPage() {
         }
     }
 
+    const geometry = {
+        "Kubus": count.cube,
+        "Limas": count.pyramid,
+        "Tabung": count.cylinder,
+    };
+
+    const shapes = {
+        "Persegi": count.square,
+        "Segitiga": count.triangle,
+        "Lingkaran": count.circle,
+    }
+
     return (
         <>
             <div className="flex-1 space-y-4 p-8 pt-6">
@@ -81,7 +138,7 @@ export default function DashboardPage() {
                                 </CardHeader>
                                 <CardContent>
                                     {/* Data total perhitungan persegi disini */}
-                                    <div className="text-2xl font-bold">10</div>
+                                    <div className="text-2xl font-bold">{count.square}</div>
                                 </CardContent>
                             </Card>
                             <Card>
@@ -90,7 +147,7 @@ export default function DashboardPage() {
                                 </CardHeader>
                                 <CardContent>
                                     {/* Data total perhitungan segitiga disini */}
-                                    <div className="text-2xl font-bold">10</div>
+                                    <div className="text-2xl font-bold">{count.triangle}</div>
                                 </CardContent>
                             </Card>
                             <Card>
@@ -99,25 +156,17 @@ export default function DashboardPage() {
                                 </CardHeader>
                                 <CardContent>
                                     {/* Data total perhitungan lingkaran disini */}
-                                    <div className="text-2xl font-bold">10</div>
+                                    <div className="text-2xl font-bold">{count.circle}</div>
                                 </CardContent>
                             </Card>
                         </div>
-                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                        <div className="w-full">
                             <Card className="col-span-4">
                                 <CardHeader>
                                     <CardTitle>Shapes Overview</CardTitle>
                                 </CardHeader>
                                 <CardContent className="pl-2">
-                                    <CalculationsOverview/>
-                                </CardContent>
-                            </Card>
-                            <Card className="col-span-3">
-                                <CardHeader>
-                                    <CardTitle>Recent Calculations</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <RecentCalculations/>
+                                    <CalculationsOverview data={shapes}/>
                                 </CardContent>
                             </Card>
                         </div>
@@ -130,7 +179,7 @@ export default function DashboardPage() {
                                 </CardHeader>
                                 <CardContent>
                                     {/* Data total perhitungan kubus disini */}
-                                    <div className="text-2xl font-bold">10</div>
+                                    <div className="text-2xl font-bold">{count.cube}</div>
                                 </CardContent>
                             </Card>
                             <Card>
@@ -139,7 +188,7 @@ export default function DashboardPage() {
                                 </CardHeader>
                                 <CardContent>
                                     {/* Data total perhitungan limas disini */}
-                                    <div className="text-2xl font-bold">10</div>
+                                    <div className="text-2xl font-bold">{count.pyramid}</div>
                                 </CardContent>
                             </Card>
                             <Card>
@@ -148,25 +197,17 @@ export default function DashboardPage() {
                                 </CardHeader>
                                 <CardContent>
                                     {/* Data total perhitungan tabung disini */}
-                                    <div className="text-2xl font-bold">10</div>
+                                    <div className="text-2xl font-bold">{count.cylinder}</div>
                                 </CardContent>
                             </Card>
                         </div>
-                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                        <div className="w-full">
                             <Card className="col-span-4">
                                 <CardHeader>
                                     <CardTitle>Geometry Overview</CardTitle>
                                 </CardHeader>
                                 <CardContent className="pl-2">
-                                    <CalculationsOverview/>
-                                </CardContent>
-                            </Card>
-                            <Card className="col-span-3">
-                                <CardHeader>
-                                    <CardTitle>Recent Calculations</CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <RecentCalculations/>
+                                    <CalculationsOverview data={geometry}/>
                                 </CardContent>
                             </Card>
                         </div>
