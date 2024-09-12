@@ -1,4 +1,4 @@
-// api/calculation.ts
+// server/calculation.ts
 
 'use server'
 
@@ -50,6 +50,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (id) {
                 const shape = await prisma.calculation.findUnique({
                     where: {id: Number(id)},
+                    include: {
+                        shape: true,
+                        user: true
+                    }
                 });
 
                 if (shape) {
@@ -60,7 +64,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
 
             } else {
-                const shapes = await prisma.calculation.findMany();
+                const shapes = await prisma.calculation.findMany({
+                    include: {
+                        user: true,
+                        shape: true,
+                    }
+                });
                 res.status(200).json(shapes);
             }
 
@@ -69,7 +78,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
     } else {
-        res.setHeader('Allow', ['POST']);
+        res.setHeader('Allow', ['POST', 'GET']);
         res.status(405).end(`Method ${req.method} Not Allowed`);
     }
 }
