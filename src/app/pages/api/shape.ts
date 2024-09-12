@@ -1,4 +1,4 @@
-// api/shape.ts
+// file path src/app/pages/api/shape.ts
 'use server'
 
 import type {NextApiRequest, NextApiResponse} from 'next';
