@@ -6,16 +6,33 @@ import {NextResponse} from "next/server";
 
 const prisma = new PrismaClient();
 
-export const GET = async () => {
-    try {
-        const calculations = await prisma.calculation.findMany({
-            include: {
-                user: true,
-                shape: true,
-            },
-        });
+export const GET = async (req: Request) => {
+    const url = new URL(req.url);
+    const id = url.searchParams.get("id");
+    let calculations: any = [];
 
-        const dataToExport = calculations.map((calculation) => ({
+    try {
+        if (id) {
+            calculations = await prisma.calculation.findMany({
+                where: {
+                    userId: Number(id),
+                },
+                include: {
+                    user: true,
+                    shape: true,
+                },
+            });
+
+        } else {
+            calculations = await prisma.calculation.findMany({
+                include: {
+                    user: true,
+                    shape: true,
+                },
+            });
+        }
+
+        const dataToExport = calculations.map((calculation: any) => ({
             calculationId: calculation.id,
             userName: calculation.user.name,
             userSchool: calculation.user.schoolName,
