@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 
 // Dokumentasi API : Hitung hasil perhitungan
 export const POST = async (req: Request) => {
-    const {userId, shapeName, formulaType, paramValues} = await req.json();
+    const {id, shapeName, formulaType, parameters} = await req.json();
 
     try {
         const shape = await prisma.shape.findFirst({
@@ -25,16 +25,15 @@ export const POST = async (req: Request) => {
         }
 
         // Hitung hasil
-        const result = evaluate(shape.formula, paramValues);
+        const result = evaluate(shape.formula, parameters);
 
         // Simpan hasil perhitungan
         const calculation = await prisma.calculation.create({
             data: {
-                userId,
                 shapeId: shape.id,
-                parameters: paramValues,
+                parameters: parameters,
                 result,
-                user: userId,
+                userId: id,
             },
         });
 
@@ -99,13 +98,13 @@ export const GET = async (req: Request) => {
                 }
             });
 
-              return NextResponse.json({
+            return NextResponse.json({
                 message: "Success",
                 status: 200,
                 data: calculations,
             });
         } catch (error) {
-             console.error("Error retrieving calculation:", error);
+            console.error("Error retrieving calculation:", error);
             return NextResponse.json({
                 message: "Internal server error",
                 status: 500,
