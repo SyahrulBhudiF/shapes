@@ -12,14 +12,14 @@ export function MainNav({
       {...props}
     >
       <Link
-        href="/dashboard"
+        href="/"
         className="text-sm font-medium transition-colors hover:text-primary"
       >
         Dashboard
       </Link>
       <Link
-        href="#"
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+        href="/pages/user"
+        className="text-sm font-medium transition-colors hover:text-primary"
       >
         Perhitungan
       </Link>
