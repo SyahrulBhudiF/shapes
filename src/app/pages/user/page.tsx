@@ -7,17 +7,20 @@ import { useForm } from "@felte/react";
 import userSchema from "@/lib/schema/userSchema";
 import { z } from "zod";
 import { validator } from "@felte/validator-zod";
+// import { redirect } from "next/navigation";
 
 const Page = () => {
   const handleSubmit = async (data: any) => {
     const response = await fetch("/api/user", {
       method: "POST",
-      // headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
 
     const dataa = await response.json();
-    console.log(dataa);
+    const data2 = dataa.data;
+    console.log(data2);
+    if (response.ok) location.href = `/pages/shape?id=${data2.id}`;
   };
 
   const { form, isSubmitting, errors } = useForm({
