@@ -6,8 +6,9 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
+// Dokumentasi API : Hitung hasil perhitungan
 export const POST = async (req: Request) => {
-  const { userId, shapeName, formulaType, paramValues } = await req.json();
+    const {id, shapeName, formulaType, parameters} = await req.json();
 
   try {
     const shape = await prisma.shape.findFirst({
@@ -23,19 +24,18 @@ export const POST = async (req: Request) => {
       );
     }
 
-    // Hitung hasil
-    const result = evaluate(shape.formula, paramValues);
+        // Hitung hasil
+        const result = evaluate(shape.formula, parameters);
 
-    // Simpan hasil perhitungan
-    const calculation = await prisma.calculation.create({
-      data: {
-        userId,
-        shapeId: shape.id,
-        parameters: paramValues,
-        result,
-        user: userId,
-      },
-    });
+        // Simpan hasil perhitungan
+        const calculation = await prisma.calculation.create({
+            data: {
+                shapeId: shape.id,
+                parameters: parameters,
+                result,
+                userId: id,
+            },
+        });
 
     return NextResponse.json(
       {
@@ -54,6 +54,7 @@ export const POST = async (req: Request) => {
   }
 };
 
+// Dokumentasi API : Ambil data perhitungan
 export const GET = async (req: Request) => {
   const url = new URL(req.url);
   const id = url.searchParams.get("id");
@@ -96,17 +97,18 @@ export const GET = async (req: Request) => {
         },
       });
 
-      return NextResponse.json({
-        message: "Success",
-        status: 200,
-        data: calculations,
-      });
-    } catch (error) {
-      console.error("Error retrieving calculation:", error);
-      return NextResponse.json({
-        message: "Internal server error",
-        status: 500,
-      });
+            return NextResponse.json({
+                message: "Success",
+                status: 200,
+                data: calculations,
+            });
+        } catch (error) {
+            console.error("Error retrieving calculation:", error);
+            return NextResponse.json({
+                message: "Internal server error",
+                status: 500,
+            });
+        }
     }
   }
 };

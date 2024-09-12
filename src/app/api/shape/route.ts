@@ -5,6 +5,7 @@ import {NextResponse} from "next/server";
 
 const prisma = new PrismaClient();
 
+// Dokumentasi API : Tambah shape baru
 export const POST = async (req: Request) => {
     const {shapeName, type, formula, parameters, formulaType} = await req.json();
 
@@ -39,6 +40,7 @@ export const POST = async (req: Request) => {
     }
 }
 
+// Dokumentasi API : Ambil shape berdasarkan ID
 export const GET = async (req: Request) => {
     const url = new URL(req.url);
     const id = url.searchParams.get("id");

@@ -6,6 +6,7 @@ import {NextResponse} from "next/server";
 
 const prisma = new PrismaClient();
 
+// Dokumentasi API : Export data perhitungan ke CSV
 export const GET = async (req: Request) => {
     const url = new URL(req.url);
     const id = url.searchParams.get("id");

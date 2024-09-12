@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
+// Dokumentasi API : Tambah user baru
 export const POST = async (req: Request) => {
   try {
     const { name, schoolName, age, address, phone } = await req.json();
@@ -32,11 +33,14 @@ export const POST = async (req: Request) => {
   }
 };
 
+// Dokumentasi API : Ambil data user
 export const GET = async (req: Request) => {
-  const url = new URL(req.url);
-  const id = url.searchParams.get("id");
-  const sortColumn = url.searchParams.get("sortColumn") || "name";
-  const sortOrder = url.searchParams.get("sortOrder") || "asc";
+    const url = new URL(req.url);
+    const id = url.searchParams.get("id");
+
+    // Get sortColumn and sortOrder from query params
+    const sortColumn = url.searchParams.get("sortColumn") || "name";
+    const sortOrder = url.searchParams.get("sortOrder") || "asc";
 
   if (id) {
     try {
