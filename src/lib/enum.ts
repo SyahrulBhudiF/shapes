@@ -15,7 +15,7 @@ enum ShapeName {
     square = "Persegi",
     circle = "Lingkaran",
     triangle = "Segitiga",
-    cuboid = "Balok",
+    pyramid = "Limas",
     cube = "Kubus",
     cylinder = "Tabung",
 }

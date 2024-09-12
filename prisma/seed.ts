@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import {PrismaClient} from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -25,18 +25,18 @@ const shapesData = [
         formulaType: 'Luas'
     },
     {
-        shapeName: 'Balok',
-        type: 'BangunRuang',
-        formula: '2 * (p*l + l*t + t*p)',
-        parameters: 'p, l, t',
-        formulaType: 'Luas'
+        shapeName: "Limas",
+        type: "BangunRuang",
+        formula: "p^2 + 2 * p * t",
+        parameters: "p, t",
+        formulaType: "Luas",
     },
     {
-        shapeName: 'Balok',
-        type: 'BangunRuang',
-        formula: 'p * l * t',
-        parameters: 'p, l, t',
-        formulaType: 'Volume'
+        shapeName: "Limas",
+        type: "BangunRuang",
+        formula: "(1/3) * p * l * t",
+        parameters: "p, l, t",
+        formulaType: "Volume",
     },
     {
         shapeName: 'Kubus',
