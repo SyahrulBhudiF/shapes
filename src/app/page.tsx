@@ -9,11 +9,18 @@ import {useEffect, useState} from "react";
 
 export default function DashboardPage() {
     const [data, setData] = useState([]);
+    const [sortColumn, setSortColumn] = useState('name');
+    const [sortOrder, setSortOrder] = useState('asc');
+
+    const handleSort = (column: string) => {
+        setSortColumn(column);
+        setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    };
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const response = await fetch(`/api/user`, {
+                const response = await fetch(`/api/user?sortColumn=${sortColumn}&sortOrder=${sortOrder}`, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -176,6 +183,8 @@ export default function DashboardPage() {
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>No</TableHead>
+                                    <TableHead onClick={() => handleSort('name')}>Nama</TableHead>
+                                    <TableHead onClick={() => handleSort('age')}>Umur</TableHead>
                                     <TableHead>Nama</TableHead>
                                     <TableHead>Umur</TableHead>
                                     <TableHead>Alamat</TableHead>

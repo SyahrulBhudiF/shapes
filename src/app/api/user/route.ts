@@ -35,6 +35,8 @@ export const POST = async (req: Request) => {
 export const GET = async (req: Request) => {
     const url = new URL(req.url);
     const id = url.searchParams.get("id");
+    const sortColumn = url.searchParams.get("sortColumn") || "name";
+    const sortOrder = url.searchParams.get("sortOrder") || "asc";
 
     if (id) {
         try {
@@ -69,6 +71,9 @@ export const GET = async (req: Request) => {
             const users = await prisma.user.findMany({
                 include: {
                     calculations: true,
+                },
+                orderBy: {
+                    [sortColumn]: sortOrder,
                 },
             });
 
