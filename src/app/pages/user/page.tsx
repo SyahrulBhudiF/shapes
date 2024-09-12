@@ -31,7 +31,7 @@ const Page = () => {
   });
 
   return (
-    <div className="flex-1 grid grid-cols-1 border p-4 mt-12 space-y-6">
+    <div className="flex-1 flex flex-col border p-4 mt-12 space-y-6">
       <div>
         <h2 className="text-3xl font-bold tracking-tight">Biodata Siswa</h2>
       </div>
