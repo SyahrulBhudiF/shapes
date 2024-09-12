@@ -1,21 +1,26 @@
 "use server";
 
-import {PrismaClient} from "@prisma/client";
+import {FormulaType, PrismaClient, ShapeName, ShapeType} from "@prisma/client";
 import type {NextApiRequest, NextApiResponse} from "next";
 import addData from "@/helper/response";
 
 const prisma = new PrismaClient();
 
 export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
-    const {name, schoolName, age, address, phone} = req.body;
+    const {shapeName, type, formula, parameters, formulaType} = req.body;
 
     try {
-        const user = await prisma.user.create({
-            data: {name, schoolName, age, address, phone},
+        const shape = await prisma.shape.create({
+            data: {
+                shapeName: shapeName as ShapeName,
+                type: type as ShapeType,
+                formula,
+                parameters,
+                formulaType: formulaType as FormulaType,
+            },
         });
 
-        return res.status(201).json(addData({message: "Success", data: user})
-        );
+        return res.status(201).json(addData({message: "Success", data: shape}));
 
     } catch (error) {
         return res.status(500).json(
@@ -31,9 +36,6 @@ export const GET = async (req: NextApiRequest, res: NextApiResponse) => {
         try {
             const shape = await prisma.shape.findUnique({
                 where: {id: Number(id)},
-                include: {
-                    Calculation: true,
-                }
             });
 
             if (shape) {
@@ -52,11 +54,7 @@ export const GET = async (req: NextApiRequest, res: NextApiResponse) => {
         }
     } else {
         try {
-            const shapes = await prisma.shape.findMany({
-                include: {
-                    Calculation: true,
-                }
-            });
+            const shapes = await prisma.shape.findMany();
 
             return res.status(200).json(
                 addData({message: "Success", data: shapes})
@@ -65,4 +63,4 @@ export const GET = async (req: NextApiRequest, res: NextApiResponse) => {
             return res.status(500).json({error: "Internal server error"});
         }
     }
-};
+}

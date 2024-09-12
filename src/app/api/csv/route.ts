@@ -1,17 +1,12 @@
-// server/csv.ts
-'use server'
+"use server";
 
-import type {NextApiRequest, NextApiResponse} from 'next';
-import {PrismaClient} from '@prisma/client';
-import {unparse} from 'papaparse';
+import {PrismaClient} from "@prisma/client";
+import type {NextApiRequest, NextApiResponse} from "next";
+import {unparse} from "papaparse";
 
 const prisma = new PrismaClient();
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method !== 'GET') {
-        return res.status(405).json({message: 'Method Not Allowed'});
-    }
-
+export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         const calculations = await prisma.calculation.findMany({
             include: {
@@ -40,9 +35,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.setHeader('Content-Type', 'text/csv');
         res.setHeader('Content-Disposition', 'attachment; filename=calculations.csv');
 
-        // Kirim file CSV
         return res.status(200).send(csv);
     } catch (error) {
-        res.status(500).json({error: 'Internal server error'});
+        return res.status(500).json({error: 'Internal server error'});
     }
 }
