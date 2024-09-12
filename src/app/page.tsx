@@ -28,6 +28,7 @@ export default function DashboardPage() {
                     method: 'GET',
                 });
                 const result = await response.json();
+                console.log(result.data);
                 setData(result.data);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -35,7 +36,7 @@ export default function DashboardPage() {
         }
 
         fetchData();
-    }, []);
+    }, [sortColumn, sortOrder]);
 
     const handleClick = (id?: number) => {
         return async () => {

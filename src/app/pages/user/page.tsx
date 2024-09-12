@@ -7,6 +7,7 @@ import { useForm } from "@felte/react";
 import userSchema from "@/lib/schema/userSchema";
 import { z } from "zod";
 import { validator } from "@felte/validator-zod";
+import {redirect} from "next/navigation";
 
 const Page = () => {
   const handleSubmit = async (data: any) => {
@@ -17,6 +18,11 @@ const Page = () => {
     });
 
     const dataa = await response.json();
+
+    if (response.ok){
+      redirect("/user");
+    }
+
     console.log(dataa);
   };
 

@@ -6,6 +6,7 @@ import {NextResponse} from "next/server";
 
 const prisma = new PrismaClient();
 
+// Dokumentasi API : Hitung hasil perhitungan
 export const POST = async (req: Request) => {
     const {userId, shapeName, formulaType, paramValues} = await req.json();
 
@@ -54,6 +55,7 @@ export const POST = async (req: Request) => {
     }
 }
 
+// Dokumentasi API : Ambil data perhitungan
 export const GET = async (req: Request) => {
     const url = new URL(req.url);
     const id = url.searchParams.get("id");
