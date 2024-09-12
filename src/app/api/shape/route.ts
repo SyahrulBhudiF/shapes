@@ -1,13 +1,12 @@
 "use server";
 
 import {FormulaType, PrismaClient, ShapeName, ShapeType} from "@prisma/client";
-import type {NextApiRequest, NextApiResponse} from "next";
-import addData from "@/helper/response";
+import {NextResponse} from "next/server";
 
 const prisma = new PrismaClient();
 
-export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
-    const {shapeName, type, formula, parameters, formulaType} = req.body;
+export const POST = async (req: Request) => {
+    const {shapeName, type, formula, parameters, formulaType} = await req.json();
 
     try {
         const shape = await prisma.shape.create({
@@ -20,17 +19,29 @@ export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
             },
         });
 
-        return res.status(201).json(addData({message: "Success", data: shape}));
+        return NextResponse.json(
+            {
+                message: "Success",
+                data: shape,
+            },
+            {status: 201}
+        );
 
     } catch (error) {
-        return res.status(500).json(
-            addData({message: "Internal server error"})
+        console.error("Error creating user:", error);
+
+        return NextResponse.json(
+            {
+                message: "Internal server error",
+            },
+            {status: 500}
         );
     }
 }
 
-export const GET = async (req: NextApiRequest, res: NextApiResponse) => {
-    const {id} = req.query;
+export const GET = async (req: Request) => {
+    const url = new URL(req.url);
+    const id = url.searchParams.get("id");
 
     if (id) {
         try {
@@ -39,28 +50,39 @@ export const GET = async (req: NextApiRequest, res: NextApiResponse) => {
             });
 
             if (shape) {
-                return res.status(200).json(
-                    addData({message: "Success", data: shape})
-                );
+                return NextResponse.json({
+                    message: "Success",
+                    status: 200,
+                    data: shape,
+                });
             } else {
-                return res.status(404).json(
-                    addData({message: "Shape not found"})
-                );
+                return NextResponse.json({
+                    message: "Shape not found",
+                    status: 404,
+                });
             }
         } catch (error) {
-            return res.status(500).json(
-                addData({message: "Internal server error"})
-            );
+            console.error("Error finding shape:", error);
+            return NextResponse.json({
+                message: "Internal server error",
+                status: 500,
+            });
         }
     } else {
         try {
             const shapes = await prisma.shape.findMany();
 
-            return res.status(200).json(
-                addData({message: "Success", data: shapes})
-            );
+            return NextResponse.json({
+                message: "Success",
+                status: 200,
+                data: shapes,
+            });
         } catch (error) {
-            return res.status(500).json({error: "Internal server error"});
+            console.error("Error retrieving shape:", error);
+            return NextResponse.json({
+                message: "Internal server error",
+                status: 500,
+            });
         }
     }
 }

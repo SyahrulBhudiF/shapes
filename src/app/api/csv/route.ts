@@ -1,12 +1,12 @@
 "use server";
 
 import {PrismaClient} from "@prisma/client";
-import type {NextApiRequest, NextApiResponse} from "next";
 import {unparse} from "papaparse";
+import {NextResponse} from "next/server";
 
 const prisma = new PrismaClient();
 
-export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
+export const GET = async () => {
     try {
         const calculations = await prisma.calculation.findMany({
             include: {
@@ -31,12 +31,19 @@ export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
         // Menggunakan unparse untuk mengubah data ke CSV
         const csv = unparse(dataToExport);
 
-        // Set header untuk download file CSV
-        res.setHeader('Content-Type', 'text/csv');
-        res.setHeader('Content-Disposition', 'attachment; filename=calculations.csv');
-
-        return res.status(200).send(csv);
+        return new NextResponse(csv, {
+            headers: {
+                'Content-Type': 'text/csv',
+                'Content-Disposition': 'attachment; filename=calculations.csv',
+            },
+            status: 200,
+        })
     } catch (error) {
-        return res.status(500).json({error: 'Internal server error'});
+        return NextResponse.json(
+            {
+                message: "Internal server error",
+            },
+            {status: 500}
+        );
     }
 }

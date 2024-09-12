@@ -1,14 +1,13 @@
 "use server";
 
 import {PrismaClient} from "@prisma/client";
-import type {NextApiRequest, NextApiResponse} from "next";
-import addData from "@/helper/response";
 import {evaluate} from "mathjs";
+import {NextResponse} from "next/server";
 
 const prisma = new PrismaClient();
 
-export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
-    const {userId, shapeName, formulaType, paramValues} = req.body;
+export const POST = async (req: Request) => {
+    const {userId, shapeName, formulaType, paramValues} = await req.json();
 
     try {
         const shape = await prisma.shape.findFirst({
@@ -16,7 +15,12 @@ export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
         });
 
         if (!shape) {
-            return res.status(404).json({error: 'Shape not found'});
+            return NextResponse.json(
+                {
+                    message: "Not Found",
+                },
+                {status: 404}
+            );
         }
 
         // Hitung hasil
@@ -33,17 +37,26 @@ export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
             },
         });
 
-        return res.status(201).json(addData({message: "Success", data: calculation}));
-
+        return NextResponse.json(
+            {
+                message: "Success",
+                data: calculation,
+            },
+            {status: 201}
+        );
     } catch (error) {
-        return res.status(500).json(
-            addData({message: "Internal server error"})
+        return NextResponse.json(
+            {
+                message: "Internal server error",
+            },
+            {status: 500}
         );
     }
 }
 
-export const GET = async (req: NextApiRequest, res: NextApiResponse) => {
-    const {id} = req.query;
+export const GET = async (req: Request) => {
+    const url = new URL(req.url);
+    const id = url.searchParams.get("id");
 
     if (id) {
         try {
@@ -56,19 +69,24 @@ export const GET = async (req: NextApiRequest, res: NextApiResponse) => {
             });
 
             if (calculation) {
-                return res.status(200).json(
-                    addData({message: "Success", data: calculation})
-                );
+                return NextResponse.json({
+                    message: "Success",
+                    status: 200,
+                    data: calculation,
+                });
             } else {
-                return res.status(404).json(
-                    addData({message: "Calculation not found"})
-                );
+                return NextResponse.json({
+                    message: "Calculation not found",
+                    status: 404,
+                });
             }
 
         } catch (error) {
-            return res.status(500).json(
-                addData({message: "Internal server error"})
-            );
+            console.error("Error finding calculation:", error);
+            return NextResponse.json({
+                message: "Internal server error",
+                status: 500,
+            });
         }
     } else {
         try {
@@ -79,13 +97,17 @@ export const GET = async (req: NextApiRequest, res: NextApiResponse) => {
                 }
             });
 
-            return res.status(200).json(
-                addData({message: "Success", data: calculations})
-            );
+              return NextResponse.json({
+                message: "Success",
+                status: 200,
+                data: calculations,
+            });
         } catch (error) {
-            return res.status(500).json(
-                addData({message: "Internal server error"})
-            );
+             console.error("Error retrieving calculation:", error);
+            return NextResponse.json({
+                message: "Internal server error",
+                status: 500,
+            });
         }
     }
 }
