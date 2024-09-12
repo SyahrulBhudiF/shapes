@@ -4,7 +4,60 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+// Enum untuk tipe bentuk
+enum ShapeType {
+  BangunDatar
+  BangunRuang
+}
+
+// Enum untuk tipe formula
+enum FormulaType {
+  Luas
+  Volume
+}
+
+// Enum untuk nama bentuk
+enum ShapeName {
+  Persegi
+  Lingkaran
+  Segitiga
+  Balok
+  Kubus
+  Tabung
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  name         String
+  schoolName   String
+  age          Int
+  address      String
+  phone        String
+  calculations Calculation[] // Relasi ke Calculation
+}
+
+model Shape {
+  id          Int           @id @default(autoincrement())
+  shapeName   ShapeName // Enum untuk nama bentuk
+  type        ShapeType // Enum untuk tipe bentuk
+  formula     String
+  parameters  String // Parameter dalam bentuk string, misalnya: 'p, l, t'
+  formulaType FormulaType // Enum untuk tipe formula
+  Calculation Calculation[]
+}
+
+model Calculation {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id])
+  shapeId    Int
+  shape      Shape    @relation(fields: [shapeId], references: [id])
+  parameters Json
+  result     Float
+  createdAt  DateTime @default(now())
 }
