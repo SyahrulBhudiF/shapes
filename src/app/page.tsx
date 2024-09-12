@@ -6,6 +6,7 @@ import {CalculationsOverview} from "./components/calculations-overview";
 import {RecentCalculations} from "./components/recent-calculations";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {useEffect, useState} from "react";
+import {userInterface} from "@/lib/interface/userInterface";
 
 export default function DashboardPage() {
     const [data, setData] = useState([]);
@@ -176,15 +177,22 @@ export default function DashboardPage() {
                         <CardTitle className={"text-sm"}>Download semua data <span
                             className={"cursor-pointer underline decoration-1 text-blue-500"}
                             onClick={handleClick()}>link</span></CardTitle>
+
                     </CardHeader>
+                    <div className={"flex px-6 gap-4"}>
+                        <div onClick={() => handleSort('name')}
+                             className={"cursor-pointer underline decoration-1 text-blue-500 text-sm"}>Urutkan Nama
+                        </div>
+                        <div onClick={() => handleSort('age')}
+                             className={"cursor-pointer underline decoration-1 text-blue-500 text-sm"}>Urutkan Umur
+                        </div>
+                    </div>
                     <CardContent>
                         <Table className={"table table- w-full"}>
                             <TableCaption>List Siswa</TableCaption>
                             <TableHeader>
                                 <TableRow>
                                     <TableHead>No</TableHead>
-                                    <TableHead onClick={() => handleSort('name')}>Nama</TableHead>
-                                    <TableHead onClick={() => handleSort('age')}>Umur</TableHead>
                                     <TableHead>Nama</TableHead>
                                     <TableHead>Umur</TableHead>
                                     <TableHead>Alamat</TableHead>
@@ -194,7 +202,7 @@ export default function DashboardPage() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {data.map((item, index) => (
+                                {data.map((item: userInterface, index) => (
                                     <TableRow key={item.id}>
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{item.name}</TableCell>
@@ -211,10 +219,10 @@ export default function DashboardPage() {
                                 ))}
                             </TableBody>
                         </Table>
-
                     </CardContent>
                 </Card>
             </div>
         </>
-    );
+    )
+        ;
 }
