@@ -1,7 +1,7 @@
 // Enum for shape type
 enum ShapeType {
-    flatShape = "Bangun Datar",
-    solidShape = "Bangun Ruang",
+    flatShape = "BangunDatar",
+    solidShape = "BangunRuang",
 }
 
 // Enum for formula type
