@@ -1,4 +1,4 @@
-// api/user.ts
+// server/user.ts
 
 'use server'
 
@@ -28,6 +28,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (id) {
                 const user = await prisma.user.findUnique({
                     where: {id: Number(id)},
+                    include: {
+                        calculations: true,
+                    }
                 });
 
                 if (user) {
@@ -38,7 +41,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
 
             } else {
-                const users = await prisma.user.findMany();
+                const users = await prisma.user.findMany({
+                    include: {
+                        calculations: true,
+                    }
+                });
                 res.status(200).json(users);
             }
         } catch (error) {
@@ -46,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
     } else {
-        res.setHeader('Allow', ['POST']);
+        res.setHeader('Allow', ['POST', 'GET']);
         res.status(405).end(`Method ${req.method} Not Allowed`);
     }
 }
