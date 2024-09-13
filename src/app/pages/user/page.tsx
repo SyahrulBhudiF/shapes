@@ -106,7 +106,7 @@ const Page = () => {
                 </div>
                 <div className="flex justify-end">
                     <Button type="submit">
-                        Submit
+                        Simpan
                     </Button>
                 </div>
             </form>
