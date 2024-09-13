@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && prisma generate",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "seed": "bun prisma/seed.ts",
-    "route": "bun src/helper/listRoutes.ts"
+    "route": "bun src/helper/listRoutes.ts",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@felte/react": "^1.2.13",
