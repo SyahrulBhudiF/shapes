@@ -5,4 +5,5 @@ export interface userInterface {
     age: number;
     address: string;
     phone: string;
+    createdAt: any;
 }

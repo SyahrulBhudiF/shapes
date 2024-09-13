@@ -3,10 +3,10 @@
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import {CalculationsOverview} from "./components/calculations-overview";
-import {RecentCalculations} from "./components/recent-calculations";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {useEffect, useState} from "react";
 import {userInterface} from "@/lib/interface/userInterface";
+import {format} from "date-fns";
 
 export default function DashboardPage() {
     const [data, setData] = useState([]);
@@ -40,39 +40,43 @@ export default function DashboardPage() {
 
                 const newCount = {...count};
 
-                for (let j = 0; j < result.data[0].calculations.length; j++) {
-                    switch (result.data[0].calculations[j].shapeId) {
-                        case 22:
-                            newCount.square += 1;
-                            break;
-                        case 23:
-                            newCount.circle += 1;
-                            break;
-                        case 24:
-                            newCount.triangle += 1;
-                            break;
-                        case 25:
-                            newCount.pyramid += 1;
-                            break;
-                        case 26:
-                            newCount.cube += 1;
-                            break;
-                        case 27:
-                            newCount.cube += 1;
-                            break;
-                        case 28:
-                            newCount.cylinder += 1;
-                            break;
-                        case 29:
-                            newCount.cylinder += 1;
-                            break;
-                        case 30:
-                            newCount.cylinder += 1;
-                            break;
+                for (let i = 0; i < result.data.length; i++) {
+                    for (let j = 0; j < result.data[i].calculations.length; j++) {
+                        switch (result.data[i].calculations[j].shapeId) {
+                            case 22:
+                                newCount.square += 1;
+                                break;
+                            case 23:
+                                newCount.circle += 1;
+                                break;
+                            case 24:
+                                newCount.triangle += 1;
+                                break;
+                            case 25:
+                                newCount.pyramid += 1;
+                                break;
+                            case 26:
+                                newCount.cube += 1;
+                                break;
+                            case 27:
+                                newCount.cube += 1;
+                                break;
+                            case 28:
+                                newCount.cylinder += 1;
+                                break;
+                            case 29:
+                                newCount.cylinder += 1;
+                                break;
+                            case 30:
+                                newCount.cylinder += 1;
+                                break;
+                        }
                     }
                 }
 
                 setCount(newCount);
+
+                console.log(result.data[0]);
 
                 setData(result.data);
             } catch (error) {
@@ -228,6 +232,9 @@ export default function DashboardPage() {
                         <div onClick={() => handleSort('age')}
                              className={"cursor-pointer underline decoration-1 text-blue-500 text-sm"}>Urutkan Umur
                         </div>
+                        <div onClick={() => handleSort('address')}
+                             className={"cursor-pointer underline decoration-1 text-blue-500 text-sm"}>Urutkan tanggal
+                        </div>
                     </div>
                     <CardContent>
                         <Table className={"table table- w-full"}>
@@ -240,6 +247,7 @@ export default function DashboardPage() {
                                     <TableHead>Alamat</TableHead>
                                     <TableHead>Sekolah</TableHead>
                                     <TableHead>No Hp</TableHead>
+                                    <TableHead>Tanggal</TableHead>
                                     <TableHead>Download Perhitungan</TableHead>
                                 </TableRow>
                             </TableHeader>
@@ -252,6 +260,7 @@ export default function DashboardPage() {
                                         <TableCell>{item.address}</TableCell>
                                         <TableCell>{item.schoolName}</TableCell>
                                         <TableCell>{item.phone}</TableCell>
+                                        <TableCell>{format(new Date(item.createdAt), 'dd MMM yyyy HH:mm:ss')}</TableCell>
                                         <TableCell>
                                             <span className={"cursor-pointer"} onClick={handleClick(item.id)}>
                                                 Download

@@ -70,7 +70,7 @@ const shapesData = [
 
 async function seed() {
     // Drop all existing data
-    await prisma.shape.deleteMany({});
+    // await prisma.shape.deleteMany({});
 
     // Seed new data
     for (const shapeData of shapesData) {
